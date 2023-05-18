@@ -1,0 +1,20 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    {% if not category %}
+        <h1>Listings</h1>
+    {% else %}
+        <h1>{{ category.name }}</h1>
+    {% endif %}
+
+    
+    {% if not listings %}
+        <h2>Sorry, there are no listings for {{ category.name }}.</h2>
+    {% else %}
+        {% for listing in listings %}
+            <ul>
+                <li><a href="{% url 'view_listing' listing.id %}">{{ listing.title }}: {{ listing.description }} (${{ listing.starting_price}}) <img src="{{ listing.image }}" width=60></a></li>
+            </ul>
+        {% endfor %}
+    {% endif %}
+{% endblock %}

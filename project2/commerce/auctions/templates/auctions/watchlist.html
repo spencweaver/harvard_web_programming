@@ -1,0 +1,14 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    {% if not listings %}
+        <h1>You are not watching any items</h1>
+    {% else %}
+        {% for listing in listings %}
+            <ul>
+                <li><a href="{% url 'view_listing' listing.id %}">{{ listing.title }} {{ listing.description }} (${{ listing.price }}) <img src="{{ listing.image }}" width=25> </a></li>
+            </ul>
+        {% endfor %}
+    {% endif %}
+
+{% endblock %}

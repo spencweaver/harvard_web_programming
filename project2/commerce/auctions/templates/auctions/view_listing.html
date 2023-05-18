@@ -1,0 +1,52 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    {% if winner == 2 %}
+        <h1>You are the Winner of {{ listing.title }}!</h1>
+    {% elif winner == 1 %}
+        <h1>{{ listing.title }}</h1>    
+    {% elif winner == 0 %}
+        <h1>Sorry, {{ listing.title }} is closed</h1>
+    {% endif %}
+    
+    {% if listing.image %}
+    <img src="{{ listing.image }}" width=300>
+    {% endif %}
+    {{ listing.description }}<br>
+    Price: ${{ listing.starting_price }}
+    
+    {% if user.is_authenticated %}
+        <br>
+        <a href="{% url 'watchlist' listing.id %}">Add/Remove from Watchlist</a>
+
+        <form action="{% url 'bid' listing.id %}" method="post">
+            {% csrf_token %}
+            {{ bid }}
+            <button>Bid</button>
+        </form>
+        {% if closing %}
+            <form action="{% url 'close' listing.id %}" method="post">
+                {% csrf_token %}
+                <button>Close Listing</button>
+            </form>
+        {% endif %}
+        <hr>
+        {% if user.is_authenticated %}
+            <H1>Comments</H1>
+            <form action="{% url 'comment' listing.id %}" method="post">
+                {% csrf_token %}
+                {{ comment }}
+                <button>Comment</button>
+            </form>
+        {% endif %}
+        <br>
+        {% for comment in comments %}
+            <ul>
+                <li>{{ comment.commenter }}: {{ comment.body }}</li>
+            </ul>
+        {% endfor %}
+        
+
+        
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,53 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>{% block title %}Network Extended{% endblock %}</title>
+        <link href="{% static 'networkext/styles.css' %}" rel="stylesheet">
+        <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+        <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+        <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+        {% block script %}{% endblock %}
+    </head>
+    <body>
+        
+        {% block react %}{% endblock %}
+        {% block network %}{% endblock %}
+        <nav>
+            <a href="#">Network Extended</a>
+
+            <div>
+                <ul>
+                    {% if user.is_authenticated %}
+                        <li>
+                            <a href="{% url 'index' %}">{{ user.username }}</a>
+                        </li>
+                    {% endif %}
+                    <li>
+                        <a href="#">Friends</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'index' %}">Posts</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'logout' %}">Logout</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'login' %}">Login</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'register' %}">Register</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        
+        
+
+        <div class="body">
+            {% block body %}
+            {% endblock %}
+        </div>
+    </body>
+</html>

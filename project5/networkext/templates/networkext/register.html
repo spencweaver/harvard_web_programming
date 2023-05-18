@@ -1,0 +1,28 @@
+{% extends "networkext/layout.html" %}
+
+{% block body %}
+    <h2>Register</h2>
+
+    {% if message %}
+        <div id="message">{{ message }}</div>
+    {% endif %}
+
+
+
+    <form action="{% url 'register' %}" method="post">
+        {% csrf_token %}
+        <div>
+            <input autofocus type="text" name="username" placeholder="Username">
+        </div>
+        <div>
+            <input type="password" name="password" placeholder="Password">
+        </div>
+        <div>
+            <input type="password" name="confirmation" placeholder="Confirm Password">
+        </div>
+        <div>
+            <input type="submit" value="register">
+        </div>
+    </form>
+
+{% endblock %}

@@ -1,0 +1,101 @@
+{% extends "networkext/layout.html" %}
+{% load static %}
+
+
+
+{% block body %}
+    {% if user.is_authenticated %}
+    <h1>Logged In</h1>
+
+    <form action="{% url 'post_view' %}" method="post">{% csrf_token %}
+        <input type="text" name="post_body" placeholder="Post">
+        <input type="submit" value="post">
+    </form>
+    <div id="network"></div>
+    <div id="messages"></div>
+    <div id="send_message"></div>
+    
+    {% if message %}
+        <div id="message">{{ message }}</div>
+    {% endif %}
+
+    <h1>Like Count</h1>{{ user.like_list.count }}<br>
+    <p>is liked: {{ is_liked.1 }}</p>
+
+    <h1>Users</h1>
+    {% for user in users %}
+        <ul>
+            <li>
+                <p>{{ user.id }} , {{user.username}}</p>
+                <p>Friends: {{ user.friends.count }}</p>
+                <form action="{% url 'friend_request' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="user_id" value="{{ user.id }}">
+                    <input type="submit" value="Friend">
+                </form>
+            </li>
+        </ul>
+    {% endfor %}
+
+    <h1>Posts</h1>
+    {% for post in posts %}
+        <ul>
+            <li>
+                <p>{{ post.id }} {{ post.author }}: {{ post.body }}</p>
+                <p>Likes: {{ post.likes.count }}</p>
+                    <form action="{% url 'like_post' %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="post_id" value="{{ post.id }}">
+                            <input type="submit" value="Like">
+                            {{ forloop.counter }}
+                            <p>hi</p>
+                    </form>
+            </li>
+        </ul>
+    {% endfor %}
+    <nav>
+        <h1>{{ posts.count }}</h1>
+        <ul class="post_page">
+            {% if posts.has_previous %}
+                <li>
+                    <a class="post_link" href="?page_number={{ posts.previous_page_number }}">Previous</a>
+                </li>
+            {% endif %}
+                <li class="post_item active">
+                    <span class="page_link">
+                        {{ posts.number }}
+                    </span>
+                </li>
+            {% if posts.has_next %}
+                <li class="page_item">
+                    <a class="post_link" href="?page_number={{ posts.next_page_number}}">Next</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    
+
+    <h1>Friends</h1>
+    {% for friend in friends %}
+        <ul>
+            <li class="user_message_{{ friend.id }}">
+                <a href="{% url 'profile' friend.id %}">{{ friend.username }}</a>
+                <div class="message_div_{{ friend.id }}"></div>
+                <button class="message_button" data-message="{{ friend.id }}">Message</button>
+            </li>
+        </ul>
+    {% endfor %}
+
+    {% endif %}
+
+
+{% endblock %}
+
+{% block react %}
+    <script type="text/babel" src="{% static 'networkext/react.js' %}"></script>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'networkext/index.js' %}"></script>
+{% endblock %}
